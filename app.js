@@ -14,11 +14,11 @@ const upload = multer();
 //multer to handle parsing data from form-data
 app.use(upload.array());
 
-//mmiddleware just for fun
+//middleware if user forget to use /api
 app.use((req, res, next) => {
     if(!req.url.includes('/api')){
         res.status(500).send({
-            message: 'Dude -_- you forgot to use api on your url'
+            message: `do you mean http://localhost:3000${url}${req.url}?`
         })
     }else{
         next();
