@@ -1,5 +1,6 @@
 const {success , failed , notFound} = require('../helper/response-format');
 const { User } = require('../models');
+const { Token } = require('../models');
 
 //for validation
 const Validator = require("fastest-validator");
@@ -10,8 +11,6 @@ const authConf = require('../config/auth.config');
 
 //jwt
 const jwt = require('jsonwebtoken');
-
-
 
 module.exports = {
     getUser : async (req, res) => {
@@ -84,6 +83,20 @@ module.exports = {
         }catch(err){
             res.status(500).send(failed('update user failed', err));
             console.log(err);
+        }
+    },
+
+    logoutUser: async (req, res) => {
+        try{
+            let token = req.headers.authorization.split(' ')[1];
+            await Token.destroy({
+                where: {
+                    token: token
+                }
+            })
+            res.status(200).send(success('logout success , token deleted', token));
+        }catch(err){
+            res.status(500).send(failed('logout failed', err));
         }
     }
 }

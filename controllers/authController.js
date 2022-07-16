@@ -1,5 +1,6 @@
 const {success , failed , notFound} = require('../helper/response-format');
 const { User } = require('../models');
+const { Token } = require('../models');
 const authConf = require('../config/auth.config');
 
 //for validation
@@ -75,13 +76,16 @@ module.exports = {
             }
 
             let token = jwt.sign({
-                exp: Math.floor(Date.now() / 1000) + (60 * 60),
                 data: { 
                     id: user.id,
                     email: user.email,
                     name: user.name,
                 }
             } , authConf.secret);
+
+            await Token.create({
+                token: token,
+            })
 
             res.status(200).json(success('login success', token));
 

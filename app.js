@@ -28,10 +28,10 @@ app.use(mid.routeMiddleware.apiRouteCheck);
 app.use(url, authRoute);
 
 //user route
-app.use(url, [mid.authMiddleware.isLogin], userRoute);
+app.use(url, [mid.authMiddleware.isLogin, mid.authMiddleware.isTokenExists], userRoute);
 
 //product route
-app.use(url, [mid.authMiddleware.isLogin] ,productRoute);
+app.use(url, [mid.authMiddleware.isLogin, mid.authMiddleware.isTokenExists] ,productRoute);
 
 
 //midllware if route not found
