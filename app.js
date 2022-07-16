@@ -10,6 +10,7 @@ const url = "/api";
 //import route
 const productRoute = require('./routes/productRoute');
 const authRoute = require('./routes/authRoute');
+const userRoute = require('./routes/userRoute');
 
 //import multer
 const multer = require('multer');
@@ -25,6 +26,9 @@ app.use(mid.routeMiddleware.apiRouteCheck);
 //route for use route
 //auth route
 app.use(url, authRoute);
+
+//user route
+app.use(url, [mid.authMiddleware.isLogin], userRoute);
 
 //product route
 app.use(url, [mid.authMiddleware.isLogin] ,productRoute);

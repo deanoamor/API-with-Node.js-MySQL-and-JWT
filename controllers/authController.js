@@ -78,7 +78,8 @@ module.exports = {
                 exp: Math.floor(Date.now() / 1000) + (60 * 60),
                 data: { 
                     id: user.id,
-                    email:user.email
+                    email: user.email,
+                    name: user.name,
                 }
             } , authConf.secret);
 
