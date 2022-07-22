@@ -1,30 +1,30 @@
 const {success , failed , notFound} = require('../helper/response-format');
 const { User } = require('../models');
 const { Token } = require('../models');
+const { Product } = require('../models');
 
 //for validation
 const Validator = require("fastest-validator");
 const v = new Validator();
 
-//auth config
-const authConf = require('../config/auth.config');
-
-//jwt
-const jwt = require('jsonwebtoken');
 
 module.exports = {
     getUser : async (req, res) => {
         try{
-            let token = req.headers.authorization.split(' ')[1];
+            // let token = req.headers.authorization.split(' ')[1];
             let user = await User.findOne({
                 where:{
-                    email: jwt.verify(token, authConf.secret).data.email
+                    id: idUser
+                },
+                include: {
+                    model: Product,
                 }
             })
     
             res.status(200).send(success('get user success', user));
         }catch(err){
             res.status(500).send(failed('get user failed', err));
+            console.log(err)
         }
     },
 
@@ -39,10 +39,9 @@ module.exports = {
             }
 
             //token
-            let token = req.headers.authorization.split(' ')[1];
             let user = await User.findOne({
                 where:{
-                    id: jwt.verify(token, authConf.secret).data.id
+                    id: idUser
                 }
             })
 
@@ -67,14 +66,14 @@ module.exports = {
             //update user
             await User.update(obj, {
                 where: {
-                    id: user.id
+                    id: idUser
                 }
             });
 
             //find data user that already update
             let usernew = await User.findOne({
                 where:{
-                    id: jwt.verify(token, authConf.secret).data.id
+                    id: idUser
                 }
             })
 

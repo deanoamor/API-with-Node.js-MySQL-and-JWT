@@ -38,7 +38,9 @@ module.exports = {
                 })
                 return;
             }
-            req.decoded = decoded;
+
+            //parsing token with id user
+            idUser = decoded.id;
             next();
         })
 

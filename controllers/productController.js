@@ -1,9 +1,11 @@
 const {success , failed , notFound} = require('../helper/response-format');
 const { Product }  = require('../models');
+const { User }  = require('../models');
 
 //for validation
 const Validator = require("fastest-validator");
 const v = new Validator();
+
 
 module.exports = {
     getProduct: async (req, res) => {
@@ -13,6 +15,9 @@ module.exports = {
                 let productid = await Product.findOne({
                     where: {
                         id: id
+                    },
+                    include: {
+                        model: User,
                     }
                 });
                 if(productid){
@@ -23,10 +28,15 @@ module.exports = {
 
                 return;
             }
-            const product = await Product.findAll();
+            const product = await Product.findAll({
+                include: {
+                    model: User,
+                }
+            });
             res.status(200).send(success('get product success', product));
         }catch(err){
             res.status(500).send(failed('get product failed', err));
+            console.log(err)
         }
     },
 
@@ -35,6 +45,7 @@ module.exports = {
             //initialize variable
             let name = req.body.name;
             let price = req.body.price;
+            let users_id = idUser;
             let productarray = [];
 
             //create schema for validation
@@ -52,6 +63,7 @@ module.exports = {
             for(let i = 0; i < name.length; i++){
                 let obj = {
                     name: name[i],
+                    users_id: users_id,
                     price: parseInt(price[i])
                 }
 
@@ -71,7 +83,6 @@ module.exports = {
             res.status(200).json(success('create product success', product));
         }catch(err){
             res.status(500).send(failed('create product failed', err));
-            console.log(err);
         }
     },
 

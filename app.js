@@ -34,7 +34,7 @@ app.use(url, [mid.authMiddleware.isLogin, mid.authMiddleware.isTokenExists], use
 app.use(url, [mid.authMiddleware.isLogin, mid.authMiddleware.isTokenExists] ,productRoute);
 
 
-//midllware if route not found
+//middleware if route not found
 app.use(mid.routeMiddleware.notfoundRouteCheck);
 
 //listen

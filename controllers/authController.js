@@ -76,11 +76,7 @@ module.exports = {
             }
 
             let token = jwt.sign({
-                data: { 
-                    id: user.id,
-                    email: user.email,
-                    name: user.name,
-                }
+                id : user.id,
             } , authConf.secret);
 
             await Token.create({
